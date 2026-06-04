@@ -1,3 +1,37 @@
 body{
-    font-family: Arial;
+    margin:0;
+    background:#111;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+header{
+    padding:15px;
+    background:#1a1a1a;
+}
+
+h2{
+    margin:0 0 10px;
+}
+
+#search{
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:6px;
+}
+
+video{
+    width:100%;
+    background:black;
+}
+
+.channel{
+    padding:12px;
+    border-bottom:1px solid #333;
+    cursor:pointer;
+}
+
+.channel:hover{
+    background:#222;
 }

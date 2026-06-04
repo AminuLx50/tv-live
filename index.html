@@ -1,9 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>TV Live</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AminuL TV</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
+
 <body>
-    <h1>My TV Live Website</h1>
+
+<header>
+    <h2>📺 AminuL TV</h2>
+
+    <input
+        type="text"
+        id="search"
+        placeholder="Search channel..."
+    >
+</header>
+
+<video
+    id="video"
+    controls
+    autoplay
+></video>
+
+<div id="channelList"></div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
