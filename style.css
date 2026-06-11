@@ -97,15 +97,17 @@ transition:0.3s;
 .channel:hover
 
 .channel-logo{
-width:50px !important;
-height:50px !important;
+width:50px;
+height:50px;
 min-width:50px;
 max-width:50px;
 min-height:50px;
 max-height:50px;
 border-radius:50%;
-object-fit:cover;
+object-fit:contain;
 background:#fff;
+padding:2px;
+box-sizing:border-box;
 flex-shrink:0;
 overflow:hidden;
 }
