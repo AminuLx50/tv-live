@@ -1,18 +1,3 @@
-const video = document.getElementById("video");
-const channelList = document.getElementById("channelList");
-
-let channels = [];
-
-fetch("channels.json")
-.then(res => res.json())
-.then(data => {
-
-    channels = data;
-
-    renderChannels(data);
-
-});
-
 function renderChannels(data){
 
     channelList.innerHTML = "";
@@ -23,7 +8,10 @@ function renderChannels(data){
 
         div.className = "channel";
 
-        div.innerHTML = channel.name;
+        div.innerHTML = `
+            <img src="${channel.logo}" class="channel-logo">
+            <span>${channel.name}</span>
+        `;
 
         div.onclick = () => playChannel(channel.url);
 
@@ -32,35 +20,3 @@ function renderChannels(data){
     });
 
 }
-
-function playChannel(url){
-
-    if(Hls.isSupported()){
-
-        const hls = new Hls();
-
-        hls.loadSource(url);
-
-        hls.attachMedia(video);
-
-    }else{
-
-        video.src = url;
-
-    }
-
-}
-
-document
-.getElementById("search")
-.addEventListener("input", e => {
-
-    const value = e.target.value.toLowerCase();
-
-    const filtered = channels.filter(ch =>
-        ch.name.toLowerCase().includes(value)
-    );
-
-    renderChannels(filtered);
-
-});
