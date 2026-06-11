@@ -57,6 +57,7 @@ video{
     width:100%;
     background:black;
     max-height:500px;
+    display:block;
 }
 
 #channelList{
@@ -64,7 +65,10 @@ video{
 }
 
 .channel{
-    padding:14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px;
     border-bottom:1px solid #333;
     cursor:pointer;
     transition:0.3s;
@@ -72,13 +76,6 @@ video{
 
 .channel:hover{
     background:#222;
-}.channel{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:12px;
-    border-bottom:1px solid #333;
-    cursor:pointer;
 }
 
 .channel-logo{
@@ -87,8 +84,10 @@ video{
     border-radius:50%;
     object-fit:cover;
     background:#fff;
+    flex-shrink:0;
 }
 
-.channel:hover{
-    background:#222;
+.channel-name{
+    font-size:16px;
+    color:white;
 }
