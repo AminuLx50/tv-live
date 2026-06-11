@@ -6,118 +6,67 @@ let channels = [];
 let hls = null;
 
 function playChannel(url) {
+    if (hls) {
+        hls.destroy();
+    }
 
-```
-channelList.style.pointerEvents = "none";
+    if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
 
-if (hls) {
-    hls.destroy();
-}
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play().catch(() => {});
+        });
 
-if (Hls.isSupported()) {
-
-    hls = new Hls({
-        maxBufferLength: 10,
-        maxMaxBufferLength: 20,
-        startLevel: 0
-    });
-
-    hls.loadSource(url);
-    hls.attachMedia(video);
-
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = url;
         video.play().catch(() => {});
-        channelList.style.pointerEvents = "auto";
-    });
-
-    hls.on(Hls.Events.ERROR, () => {
-        channelList.style.pointerEvents = "auto";
-    });
-
-} else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-
-    video.src = url;
-
-    video.play().catch(() => {});
-
-    channelList.style.pointerEvents = "auto";
-}
-```
-
+    }
 }
 
 function renderChannels(data) {
+    channelList.innerHTML = "";
 
-```
-channelList.innerHTML = "";
+    if (data.length === 0) {
+        channelList.innerHTML = "<p style='padding:15px'>No channels found</p>";
+        return;
+    }
 
-if (data.length === 0) {
-    channelList.innerHTML =
-        "<p style='padding:15px'>No channels found</p>";
-    return;
-}
+    data.forEach(channel => {
+        const div = document.createElement("div");
+        div.className = "channel";
 
-data.forEach(channel => {
+        div.innerHTML = `
+            <img src="${channel.logo}" class="channel-logo" alt="${channel.name}">
+            <span>${channel.name}</span>
+        `;
 
-    const div = document.createElement("div");
+        div.addEventListener("click", () => {
+            playChannel(channel.url);
+        });
 
-    div.className = "channel";
-
-    div.innerHTML = `
-        <img src="${channel.logo}" class="channel-logo" alt="${channel.name}">
-        <span>${channel.name}</span>
-    `;
-
-    div.addEventListener("click", () => {
-        playChannel(channel.url);
+        channelList.appendChild(div);
     });
-
-    channelList.appendChild(div);
-});
-```
-
 }
 
 fetch("./channels.json")
-.then(res => {
-if (!res.ok) {
-throw new Error("channels.json not found");
-}
-return res.json();
-})
-.then(data => {
+    .then(res => res.json())
+    .then(data => {
+        channels = data;
+        renderChannels(channels);
 
-```
-    channels = data;
-
-    renderChannels(channels);
-
-    if (channels.length > 0) {
-        playChannel(channels[0].url);
-    }
-})
-.catch(err => {
-
-    console.error(err);
-
-    channelList.innerHTML = `
-        <div style="padding:15px;color:red">
-            Failed to load channels.json
-        </div>
-    `;
-});
-```
+        if (channels.length > 0) {
+            playChannel(channels[0].url);
+        }
+    });
 
 search.addEventListener("input", () => {
+    const value = search.value.toLowerCase();
 
-```
-const value = search.value.toLowerCase();
+    const filtered = channels.filter(channel =>
+        channel.name.toLowerCase().includes(value)
+    );
 
-const filtered = channels.filter(channel =>
-    channel.name.toLowerCase().includes(value)
-);
-
-renderChannels(filtered);
-```
-
+    renderChannels(filtered);
 });
