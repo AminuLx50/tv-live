@@ -6,82 +6,118 @@ let channels = [];
 let hls = null;
 
 function playChannel(url) {
-    if (hls) {
-        hls.destroy();
-    }
 
-    if (Hls.isSupported()) {
-        hls = new Hls();
-        hls.loadSource(url);
-        hls.attachMedia(video);
+```
+channelList.style.pointerEvents = "none";
 
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play().catch(() => {});
-        });
+if (hls) {
+    hls.destroy();
+}
 
-    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-        video.src = url;
+if (Hls.isSupported()) {
+
+    hls = new Hls({
+        maxBufferLength: 10,
+        maxMaxBufferLength: 20,
+        startLevel: 0
+    });
+
+    hls.loadSource(url);
+    hls.attachMedia(video);
+
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
         video.play().catch(() => {});
-    }
+        channelList.style.pointerEvents = "auto";
+    });
+
+    hls.on(Hls.Events.ERROR, () => {
+        channelList.style.pointerEvents = "auto";
+    });
+
+} else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+
+    video.src = url;
+
+    video.play().catch(() => {});
+
+    channelList.style.pointerEvents = "auto";
+}
+```
+
 }
 
 function renderChannels(data) {
-    channelList.innerHTML = "";
 
-    if (data.length === 0) {
-        channelList.innerHTML = "<p style='padding:15px'>No channels found</p>";
-        return;
-    }
+```
+channelList.innerHTML = "";
 
-    data.forEach(channel => {
-        const div = document.createElement("div");
-        div.className = "channel";
+if (data.length === 0) {
+    channelList.innerHTML =
+        "<p style='padding:15px'>No channels found</p>";
+    return;
+}
 
-        div.innerHTML = `
-            <img src="${channel.logo}" class="channel-logo" alt="${channel.name}">
-            <span>${channel.name}</span>
-        `;
+data.forEach(channel => {
 
-        div.addEventListener("click", () => {
-            playChannel(channel.url);
-        });
+    const div = document.createElement("div");
 
-        channelList.appendChild(div);
+    div.className = "channel";
+
+    div.innerHTML = `
+        <img src="${channel.logo}" class="channel-logo" alt="${channel.name}">
+        <span>${channel.name}</span>
+    `;
+
+    div.addEventListener("click", () => {
+        playChannel(channel.url);
     });
+
+    channelList.appendChild(div);
+});
+```
+
 }
 
 fetch("./channels.json")
-    .then(res => {
-        if (!res.ok) {
-            throw new Error("channels.json not found");
-        }
-        return res.json();
-    })
-    .then(data => {
-        channels = data;
+.then(res => {
+if (!res.ok) {
+throw new Error("channels.json not found");
+}
+return res.json();
+})
+.then(data => {
 
-        renderChannels(channels);
+```
+    channels = data;
 
-        if (channels.length > 0) {
-            playChannel(channels[0].url);
-        }
-    })
-    .catch(err => {
-        console.error(err);
+    renderChannels(channels);
 
-        channelList.innerHTML = `
-            <div style="padding:15px;color:red">
-                Failed to load channels.json
-            </div>
-        `;
-    });
+    if (channels.length > 0) {
+        playChannel(channels[0].url);
+    }
+})
+.catch(err => {
+
+    console.error(err);
+
+    channelList.innerHTML = `
+        <div style="padding:15px;color:red">
+            Failed to load channels.json
+        </div>
+    `;
+});
+```
 
 search.addEventListener("input", () => {
-    const value = search.value.toLowerCase();
 
-    const filtered = channels.filter(channel =>
-        channel.name.toLowerCase().includes(value)
-    );
+```
+const value = search.value.toLowerCase();
 
-    renderChannels(filtered);
+const filtered = channels.filter(channel =>
+    channel.name.toLowerCase().includes(value)
+);
+
+renderChannels(filtered);
+```
+
 });
