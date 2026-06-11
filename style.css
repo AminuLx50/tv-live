@@ -53,15 +53,39 @@ header{
     outline:none;
 }
 
-video{
+/* Main Layout */
+
+.main-container{
+    display:flex;
+    height:calc(100vh - 120px);
+}
+
+.sidebar{
+    width:30%;
+    background:#181818;
+    border-right:1px solid #333;
+    overflow-y:auto;
+}
+
+.player-area{
+    width:70%;
+    padding:10px;
+}
+
+/* Video */
+
+#video{
     width:100%;
+    height:80vh;
     background:black;
-    max-height:500px;
+    border-radius:10px;
     display:block;
 }
 
+/* Channel List */
+
 #channelList{
-    padding:10px;
+    padding:0;
 }
 
 .channel{
@@ -87,7 +111,7 @@ video{
     flex-shrink:0;
 }
 
-.channel-name{
-    font-size:16px;
+.channel span{
     color:white;
+    font-size:16px;
 }
