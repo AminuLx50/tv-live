@@ -8,30 +8,31 @@ let hls = null;
 function playChannel(url) {
     if (hls) {
         hls.destroy();
+        hls = null;
     }
 
     if (Hls.isSupported()) {
         hls = new Hls();
+
         hls.loadSource(url);
         hls.attachMedia(video);
 
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play().catch(() => {});
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            video.play().catch(err => console.log(err));
+        });
+
+        hls.on(Hls.Events.ERROR, function (event, data) {
+            console.error("HLS Error:", data);
         });
 
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         video.src = url;
-        video.play().catch(() => {});
+        video.play().catch(err => console.log(err));
     }
 }
 
 function renderChannels(data) {
     channelList.innerHTML = "";
-
-    if (data.length === 0) {
-        channelList.innerHTML = "<p style='padding:15px'>No channels found</p>";
-        return;
-    }
 
     data.forEach(channel => {
         const div = document.createElement("div");
@@ -42,16 +43,14 @@ function renderChannels(data) {
             <span>${channel.name}</span>
         `;
 
-        div.addEventListener("click", () => {
-            playChannel(channel.url);
-        });
+        div.onclick = () => playChannel(channel.url);
 
         channelList.appendChild(div);
     });
 }
 
-fetch("./channels.json")
-    .then(res => res.json())
+fetch("channels.json")
+    .then(response => response.json())
     .then(data => {
         channels = data;
         renderChannels(channels);
@@ -59,13 +58,16 @@ fetch("./channels.json")
         if (channels.length > 0) {
             playChannel(channels[0].url);
         }
+    })
+    .catch(error => {
+        console.error("JSON Load Error:", error);
     });
 
 search.addEventListener("input", () => {
-    const value = search.value.toLowerCase();
+    const keyword = search.value.toLowerCase();
 
     const filtered = channels.filter(channel =>
-        channel.name.toLowerCase().includes(value)
+        channel.name.toLowerCase().includes(keyword)
     );
 
     renderChannels(filtered);
