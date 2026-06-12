@@ -1,27 +1,27 @@
 [
   {
     "name": "FIFA World Cup",
-    "logo": "logo/fifa.png",
+    "logo": "images/fifa.png",
     "url": "https://tvsen5.aynaott.com/PtvSports/tracks-v1a1/mono.ts.m3u8"
   },
   {
     "name": "Jamuna TV",
-    "logo": "logo/jamuna.png",
+    "logo": "images/jamuna.jpg",
     "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/1701-audio_113312_eng=113200-video=2202800.m3u8"
   },
   {
     "name": "Star News",
-    "logo": "logo/starnews.png",
+    "logo": "images/starnews.png",
     "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8"
   },
   {
     "name": "Al Jazeera",
-    "logo": "logo/aljazeera.png",
+    "logo": "images/aljazeera.png",
     "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8"
   },
   {
     "name": "Shongsod TV",
-    "logo": "logo/shongsod.png",
+    "logo": "images/shongsod.png",
     "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/1709-audio_113392_eng=113200-video=442000.m3u8"
   }
 ]
